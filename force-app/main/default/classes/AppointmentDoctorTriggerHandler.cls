@@ -1,6 +1,5 @@
 public class AppointmentDoctorTriggerHandler {
     public static void duplicateBookingError(list<Appointment_Doctor__c> triggerNew,list<Appointment_Doctor__c> triggerOld, Map<id,Appointment_Doctor__c> triggerNewMap,Map<id,Appointment_Doctor__c> triggerOldMap){
-        try {
             Map<String,Appointment_Doctor__c> appointmentDoctorMap= new Map<String,Appointment_Doctor__c>();
         Set<Id> newDoctorsIds=new Set<Id>();
         Set<Id> newAppointmentIds=new Set<Id>();
@@ -21,10 +20,6 @@ public class AppointmentDoctorTriggerHandler {
                     toBeFail.addError('This is a duplicate record.');
                 }
             }
-        }
-            
-        } catch (Exception exc) {
-            ErrorLogCreator.ErrorLog('Duplicating Records', exc.getMessage());
         }
         
     }   
