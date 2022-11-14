@@ -1,4 +1,4 @@
-public class ErrorLogHelper {
+public with sharing class ErrorLogCreator {
     public static void ErrorLog(string processName, String logDetails){
         
         Error_Log__c nl=new Error_Log__c();

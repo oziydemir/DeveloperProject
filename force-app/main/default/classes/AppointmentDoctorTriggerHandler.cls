@@ -24,7 +24,7 @@ public class AppointmentDoctorTriggerHandler {
         }
             
         } catch (Exception exc) {
-            ErrorLogHelper.ErrorLog('Duplicating Records', exc.getMessage());
+            ErrorLogCreator.ErrorLog('Duplicating Records', exc.getMessage());
         }
         
     }   
