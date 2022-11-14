@@ -1,6 +1,6 @@
 @isTest
 public class AppointmentDoctorTriggerTest {
-   @isTest
+    @isTest
         private static void triggerTest(){
             Clinic_Manager__c cm=new Clinic_Manager__c();
             cm.Phone__c='111111111';
@@ -11,8 +11,8 @@ public class AppointmentDoctorTriggerTest {
             Appointment__c appo=new Appointment__c();
             appo.Name__c='Surgery';
             appo.Live__c=true;
-            appo.Start_Date_Time__c=Date.newInstance(2022, 11, 2);
-            appo.End_Date_Time__c=Date.newInstance(2022, 11, 4);
+            appo.Start_Date_Time__c=Datetime.now().addDays(1);
+            appo.End_Date_Time__c=Datetime.now().addDays(3);
             appo.Maximum_number_of_patients__c=10;
             appo.Clinic_Manager__c=cm.Id;
             insert appo;

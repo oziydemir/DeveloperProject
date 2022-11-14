@@ -1,5 +1,5 @@
 @isTest
-public class AppointmentDoctorTriggerHandlerTest {
+private class AppointmentDoctorTriggerHandlerTest {
     @TestSetup
     static void makeData(){
         Clinic_Manager__c cm=new Clinic_Manager__c();
@@ -11,8 +11,8 @@ public class AppointmentDoctorTriggerHandlerTest {
         Appointment__c appo=new Appointment__c();
         appo.Name__c='Surgery';
         appo.Live__c=true;
-        appo.Start_Date_Time__c=Date.newInstance(2022, 11, 10);
-        appo.End_Date_Time__c=Date.newInstance(2022, 11, 12);
+        appo.Start_Date_Time__c=Datetime.now().addDays(2);
+        appo.End_Date_Time__c=Datetime.now().addDays(4);
         appo.Maximum_number_of_patients__c=10;
         appo.Clinic_Manager__c=cm.Id;
         insert appo;
@@ -28,15 +28,14 @@ public class AppointmentDoctorTriggerHandlerTest {
         newAppDoc.Appointment__c=appo.Id;
         insert newAppDoc;
     }
-@isTest
-    private static void testValidation(){
+    
+    @isTest
+            static void testValidation(){
+        Appointment_Doctor__c systemRec=[SELECT Doctor__c, Appointment__c FROM Appointment_Doctor__c LIMIT 1];
         
-        Doctor__c doc=[SELECT id FROM Doctor__c LIMIT 1];
-        Appointment__c app=[SELECT id FROM Appointment__c LIMIT 1];
-       
         Appointment_Doctor__c appDoc2=new Appointment_Doctor__c();
-        appDoc2.Doctor__c=doc.Id;
-        appDoc2.Appointment__c=app.Id;
+        appDoc2.Doctor__c=systemRec.Doctor__c;
+        appDoc2.Appointment__c=systemRec.Appointment__c;
 
         test.startTest();
         try {
@@ -46,5 +45,27 @@ public class AppointmentDoctorTriggerHandlerTest {
         }
         test.stopTest();
 
+        Integer systemCount=[SELECT COUNT() FROM Appointment_Doctor__c];
+        System.assertEquals(1, systemCount);
+
     }
+
+        static void negativeTest(){
+            Appointment_Doctor__c exRec=[SELECT id FROM Appointment_Doctor__c];
+            delete exRec;
+
+            Doctor__c oneDoc=[SELECT id FROM Doctor__c];
+            Appointment__c oneAppo=[SELECT id FROM Appointment__c];
+
+            Appointment_Doctor__c newRec= new Appointment_Doctor__c();
+            newRec.Doctor__c=oneDoc.id;
+            newRec.Appointment__c=oneAppo.id;
+            
+            test.startTest();
+            insert newRec;
+            test.stopTest();
+
+            integer countRecords=[SELECT COUNT() FROM Appointment_Doctor__c];
+            System.assertEquals(1, countRecords);
+        }
 }
