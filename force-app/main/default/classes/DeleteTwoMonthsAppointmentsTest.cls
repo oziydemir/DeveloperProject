@@ -31,4 +31,14 @@ public class DeleteTwoMonthsAppointmentsTest {
         System.assertEquals(0, countAppointments);
 
     }
+
+    @isTest
+
+    private static void testSchedulable(){
+        test.startTest();
+        DeleteAppoinmetsSchedule das=new DeleteAppoinmetsSchedule();
+        SchedulableContext sc=null;
+        das.execute(sc);
+        test.stopTest();
+    }
 }

@@ -18,6 +18,32 @@ public  class DeleteTwoMonthsAppointments implements Database.Batchable <sObject
 
     public void finish(Database.BatchableContext bc){
         //send an email to public groups.
+        List<String> usersEmail=new List<String>();
+        List<User> publicGroupUsers=[SELECT Id,Email,IsActive FROM User];
+        for (User eachUser : publicGroupUsers) {
+            if (eachUser.IsActive==true) {
+                usersEmail.add(eachUser.Email);
+            }
+        }
+        List<Messaging.SingleEmailMessage> msgList=new List<Messaging.SingleEmailMessage>();
+
+        
+            Messaging.SingleEmailMessage msg=new Messaging.SingleEmailMessage();
+            msg.setSubject('Opportunities Deleted.');
+            msg.setPlainTextBody('Hi there, ' +
+                                    '\nExecution   of   the   batch   has   been   processed.'+
+                                    '\nYour Opportunities might be deleted.');
+            msg.toaddresses=usersEmail;
+            msgList.add(msg);
+        
+
+        try {
+            Messaging.sendEmail(msgList);
+        } catch (Exception exc) {
+            System.debug(exc.getMessage());
+        }
+        
+
 
     }
 }
