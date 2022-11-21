@@ -19,7 +19,7 @@ public  class DeleteTwoMonthsAppointments implements Database.Batchable <sObject
     public void finish(Database.BatchableContext bc){
         //send an email to public groups.
         List<String> usersEmail=new List<String>();
-        List<User> publicGroupUsers=[SELECT Id,Email,IsActive FROM User];
+        List<User> publicGroupUsers=[SELECT Id, Name, Email, IsActive FROM User WHERE Id In (SELECT UserOrGroupId FROM GroupMember WHERE Group.Name = 'Daily Jobs')];
         for (User eachUser : publicGroupUsers) {
             if (eachUser.IsActive==true) {
                 usersEmail.add(eachUser.Email);
@@ -40,7 +40,7 @@ public  class DeleteTwoMonthsAppointments implements Database.Batchable <sObject
         try {
             Messaging.sendEmail(msgList);
         } catch (Exception exc) {
-            System.debug(exc.getMessage());
+            ErrorLogCreator.ErrorLog('Error when sending email from batch class.', exc.getMessage());
         }
         
 
